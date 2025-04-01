@@ -1,0 +1,87 @@
+{
+  "bot_settings": {
+    "autoeat": {
+      "enabled": true,
+      "threshold": 14,
+      "banned_food": [
+        "pufferfish",
+        "spider_eye",
+        "poisonous_potato",
+        "rotten_flesh",
+        "chorus_fruit",
+        "chicken",
+        "suspicious_stew",
+        "golden_apple",
+        "enchanted_golden_apple"
+      ]
+    },
+    "safety": {
+      "hp_disconnect": true,
+      "food_disconnect": false
+    },
+    "timings": {
+      "walking_tick_multiplier": 4,
+      "trapdoor_ticks": 20
+    }
+  },
+  "discord": {
+    "enabled": false,
+    "invisible": false,
+    "command_timeout": "10000",
+    "application_id": "DISCORD_APPLICATION_ID",
+    "bot_token": "DISCORD_BOT_TOKEN",
+    "guild": {
+      "id": "ID_OF_DISCORD_SERVER_BOT_IS_IN",
+      "admin_role_id": "ID_OF_DISCORD_ROLE_THAT_TRIGGERS_ALL_PEARLS",
+      "user_role_id": "ID_OF_DISCORD_ROLE_THAT_CAN_USE_BOT_COMMANDS"
+    }
+  },
+  "chambers": {
+    "test_chamber": {
+      "server": {
+        "address": "127.0.0.1",
+        "port": "25565"
+      },
+      "required_role": "ID_OF_DISCORD_ROLE_REQUIRED_TO_USE_THIS_CHAMBER",
+      "bot": {
+        "username": "pearlbot",
+        "auth": "offline",
+        "rest_position": {
+          "x": 5,
+          "y": 63,
+          "z": 7
+        },
+        "max_distance": 50
+      },
+      "pearls": {
+        "red": {
+          "note": "First Pearl in Test Chamber",
+          "authorized_users": ["ID_OF_DISCORD_USER_WHO_CAN_USE_THIS_PEARL"],
+          "position": {
+            "x": 2,
+            "y": 63,
+            "z": 2
+          }
+        },
+        "green": {
+          "note": "Second Pearl in Test Chamber",
+          "authorized_users": ["ID_OF_DISCORD_USER_WHO_CAN_USE_THIS_PEARL"],
+          "position": {
+            "x": 5,
+            "y": 63,
+            "z": 2
+          }
+        },
+        "blue": {
+          "note": "Third Pearl in Test Chamber",
+          "authorized_users": ["ID_OF_DISCORD_USER_WHO_CAN_USE_THIS_PEARL"],
+          "position": {
+            "x": 8,
+            "y": 63,
+            "z": 2
+          }
+        }
+      }
+    }
+  }
+}
