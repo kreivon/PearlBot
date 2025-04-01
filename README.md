@@ -12,9 +12,12 @@
 
 <h3>Usage</h3>
 <ol>
+  <li>Clone the repository</li>
+  <li>Run <code>npm install</code> to fetch required dependencies</li>
   <li>Copy the file <code>default_config.json</code> and rename it to <code>config.json</code></li>
   <li>Edit <code>config.json</code> to add account logins <a href="https://github.com/PrismarineJS/mineflayer?tab=readme-ov-file#echo-example">as done with Mineflayer</a>, and specify chamber coordinates using the test world as an example</li>
-  <li>Run the bot with NodeJS: <br><code>$ node pearlbot.js &lt;chamberId&gt; &lt;pearlId&gt;</code>
+  <li>Run the bot: <br>
+  <code>$ ./node pearlbot.js &lt;chamberId&gt; &lt;pearlId&gt;</code>
 </ol>
 
 <h3>Test World</h3>

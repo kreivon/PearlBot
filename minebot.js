@@ -40,24 +40,24 @@ export function minebot(host, port, chamberId, pearlId) {
             }
 
             bot.autoEat.on('eatStart', (opts) => {
-                console.log(`[INFO][MINEBOT] Started eating ${opts.food.name} in ${opts.offhand ? 'offhand' : 'hand'}`)
+                info(`Started eating ${opts.food.name} in ${opts.offhand ? 'offhand' : 'hand'}`, true)
             })
     
             bot.autoEat.on('eatFinish', (opts) => {
-                console.log(`[INFO][MINEBOT] Finished eating ${opts.food.name}`)
+                info(`Finished eating ${opts.food.name}`, true)
             })
     
             bot.autoEat.on('eatFail', (err) => {
-                console.error(`[ERROR][MINEBOT] Eating failed: ${err}`)
+                error(`Eating failed: ${err}`, true)
             })
     
             bot.on('error', (err) => {
-                console.error(`[ERROR][MINEBOT] ${err}`);
+                error(`${err}`);
             });
         }
 
         // Finished setup
-        console.log('[INFO][MINEBOT] Bot spawned');
+        info('Bot spawned');
 
 
         // Move to rest position
@@ -83,12 +83,12 @@ export function minebot(host, port, chamberId, pearlId) {
     bot.on('health', () => {
         // Disconnect for safety settings
         if (config['bot_settings']['safety']['hp_disconnect'] && bot.health <= 6) {
-            console.error(`[ERROR][MINEBOT] Bot health critically low: ${bot.health}`);
-            console.error(`[ERROR][MINEBOT] Manual intervention required!`);
+            error(`Bot health critically low: ${bot.health}`);
+            error(`Manual intervention required!`);
             disconnect(bot, 1);
         } else if (config['bot_settings']['safety']['food_disconnect'] && bot.food <= 6) {
-            console.error(`[ERROR][MINEBOT] Bot food critically low: ${bot.food}`);
-            console.error(`[ERROR][MINEBOT] Manual intervention required!`);
+            error(`Bot food critically low: ${bot.food}`);
+            error(`Manual intervention required!`);
             disconnect(bot, 1);
         }
 
@@ -111,15 +111,15 @@ async function path(bot, chamberId, pearlId) {
     );
 
     if (distance > config['chambers'][chamberId]['bot']['max_distance']) {
-        console.log('[ERROR][MINEBOT] Pearl position too far');
-        console.log(`[ERROR][MINEBOT] |-- Pearl ID: ${pearlId}`);
-        console.log(`[ERROR][MINEBOT] |-- Distance: ${distance}`);
+        error('Pearl position too far');
+        error(`|-- Pearl ID: ${pearlId}`, true);
+        error(`|-- Distance: ${distance}`, true);
         disconnect(bot, 1);
     } else {
         bot.pathfinder.setGoal(new GoalNear(pearl['x'], pearl['y'], pearl['z'], 2));
-        console.log('[INFO][MINEBOT] Moving to pearl position');
-        console.log(`[INFO][MINEBOT] |-- Pearl ID: ${pearlId}`);
-        console.log(`[INFO][MINEBOT] |-- Distance: ${distance}`);
+        info('Moving to pearl position');
+        info(`|-- Pearl ID: ${pearlId}`, true);
+        info(`|-- Distance: ${distance}`, true);
         await bot.waitForTicks(Math.floor(distance*config['bot_settings']['timings']['walking_tick_multiplier']));
     
         // Activate pearl with trapdoor
@@ -139,19 +139,46 @@ async function center(bot, config, chamberId) {
     );
 
     if (restDistance > config['chambers'][chamberId]['bot']['max_distance']) {
-        console.log('[ERROR][MINEBOT] Rest position too far');
-        console.log(`[ERROR][MINEBOT] |-- Distance: ${restDistance}`);
+        error('Rest position too far');
+        error(`|-- Distance: ${restDistance}`, true);
         disconnect(bot, 1);
     } else {
         bot.pathfinder.setGoal(new GoalNear(restPos['x'], restPos['y'], restPos['z'], 0));
-        console.log('[INFO][MINEBOT] Moving to rest position');
-        console.log(`[INFO][MINEBOT] |-- Distance: ${restDistance}`);
+        info('Moving to rest position');
+        info(`|-- Distance: ${restDistance}`, true);
         await bot.waitForTicks(Math.floor(restDistance*config['bot_settings']['timings']['walking_tick_multiplier']));
     }
 }
 
 async function disconnect(bot, code) {
-    console.log('[INFO][MINEBOT] Disconnecting');
+    // Disconnects the bot from the server and exits
+    info('Disconnecting');
     bot.quit();
     process.exit(code);
+}
+
+function info(message, verbose=false) {
+    // Logs a message with an info prefix
+    log(message, 'INFO', verbose)
+}
+
+function warn(message, verbose=false) {
+    // Logs a message with a warn prefix
+    log(message, 'WARN', verbose)
+}
+
+function error(message, verbose=false) {
+    // Logs a message with an error prefix
+    log(message, 'ERROR', verbose)
+}
+
+function log(message, prefix, verbose) {
+    // Logs a message with respect to prefix and verbosity settings
+    var log_prefix = ''
+    if (config['bot_settings']['log_prefix']) {
+        log_prefix = `[${prefix}][MINEBOT] `
+    }
+    if (!verbose || (verbose && config['bot_settings']['verbose'])) {
+        console.log(`${log_prefix}${message}`)
+    }
 }
