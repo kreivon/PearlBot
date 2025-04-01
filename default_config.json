@@ -22,7 +22,9 @@
     "timings": {
       "walking_tick_multiplier": 4,
       "trapdoor_ticks": 20
-    }
+    },
+    "verbose": true,
+    "log_prefix": true
   },
   "discord": {
     "enabled": false,
